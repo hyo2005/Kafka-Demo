@@ -10,11 +10,9 @@ import (
 )
 
 func main() {
-	// create a new context
+	// tao context moi
 	ctx := context.Background()
-	// produce messages in a new go routine, since
-	// both the produce and consume functions are
-	// blocking
+	//produce message trong go routine
 	go produce(ctx)
 	consume(ctx)
 }
@@ -41,7 +39,7 @@ func produce(ctx context.Context) {
 		// xem message se duoc publish vao partitionn nao, broker nao
 		err := w.WriteMessages(ctx, kafka.Message{
 			Key: []byte(strconv.Itoa(i)),
-			// in ra console thu tu cua message
+			// in ra console key cua message
 			Value: []byte("this is message" + strconv.Itoa(i)),
 		})
 		if err != nil {
@@ -56,10 +54,9 @@ func produce(ctx context.Context) {
 }
 
 func consume(ctx context.Context) {
-	//
-	// initialize a new reader with the brokers and topic
-	// the groupID identifies the consumer and prevents
-	// it from receiving duplicate messages
+	// khoi tao reader voi cac broker va topic
+	// group id dung de phan biet cac consumer trong
+	// consumer group, tranh viec nhan trung message
 	r := kafka.NewReader(kafka.ReaderConfig{
 		Brokers: []string{broker1Address, broker2Address, broker3Address},
 		Topic:   topic,
